@@ -1,20 +1,16 @@
-import express from 'express';
-import cors from 'cors';
-import { Resend } from 'resend';
-import dotenv from 'dotenv';
+const express = require('express');
+const cors = require('cors')
+const { Resend } = require('resend');
+require('dotenv').config()
 
-
-dotenv.config();
-
-global.Headers = Headers; 
 
 const app = express();
 const resend = new Resend(process.env.RESEND_APIKEY);
 
-app.use(cors());
-app.use(express.json());
+app.use(cors())
 
-// const SECRET_PASSWORD = process.env.PASSWORD;
+
+app.use(express.json());
 
 const emailValidator = (req, res, next) => {
   const { email } = req.body;
@@ -27,24 +23,25 @@ const emailValidator = (req, res, next) => {
   next();
 };
 
+
 // Ruta para enviar emails
 app.post('/send-email', emailValidator, async (req, res) => {
   try {
-    // const { ownapikey } = req.headers;
+
     const { subject, html } = req.body;
 
-    // if (ownapikey !== SECRET_PASSWORD) {
-    //   return res.status(401).json({ error: 'Acceso no autorizado' });
-    // }
-
     const payload = {
+
       from: "onboarding@resend.dev",
       to: "davidmasbaga@gmail.com",
       subject: subject,
       html: html
-    };
 
-    const { data, error } = await resend.emails.send(payload);
+    }
+
+    const { data, error } = await resend.emails.send(
+      payload
+    );
 
     if (error) {
       return res.status(400).json({ error });
@@ -56,7 +53,7 @@ app.post('/send-email', emailValidator, async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
