@@ -1,19 +1,20 @@
-global.Headers = require('node-fetch').Headers;
-const express = require('express');
-const cors = require('cors')
-const { Resend } = require('resend');
-require('dotenv').config()
+import express from 'express';
+import cors from 'cors';
+import { Resend } from 'resend';
+import dotenv from 'dotenv';
+import fetch, { Headers } from 'node-fetch';
 
+dotenv.config();
+
+global.Headers = Headers; 
 
 const app = express();
 const resend = new Resend(process.env.RESEND_APIKEY);
 
-app.use(cors())
-
-const SECRET_PASSWORD = process.env.PASSWORD
-
-
+app.use(cors());
 app.use(express.json());
+
+const SECRET_PASSWORD = process.env.PASSWORD;
 
 const emailValidator = (req, res, next) => {
   const { email } = req.body;
@@ -26,30 +27,24 @@ const emailValidator = (req, res, next) => {
   next();
 };
 
-
 // Ruta para enviar emails
-app.post('/send-email',emailValidator ,async (req, res) => {
+app.post('/send-email', emailValidator, async (req, res) => {
   try {
-    console.log(req.headers)
     const { ownapikey } = req.headers;
-    const {subject, html} = req.body;
-  
+    const { subject, html } = req.body;
+
     if (ownapikey !== SECRET_PASSWORD) {
-        return res.status(401).json({ error: 'Acceso no autorizado' });
-      }
-    
-    const payload ={
-
-        from: "onboarding@resend.dev",
-        to:"davidmasbaga@gmail.com",
-        subject: subject,
-        html:html
-
+      return res.status(401).json({ error: 'Acceso no autorizado' });
     }
 
-    const { data, error } = await resend.emails.send(
-      payload
-    );
+    const payload = {
+      from: "onboarding@resend.dev",
+      to: "davidmasbaga@gmail.com",
+      subject: subject,
+      html: html
+    };
+
+    const { data, error } = await resend.emails.send(payload);
 
     if (error) {
       return res.status(400).json({ error });
