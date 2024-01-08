@@ -1,3 +1,4 @@
+global.Headers = require('node-fetch').Headers;
 const express = require('express');
 const cors = require('cors')
 const { Resend } = require('resend');
@@ -32,7 +33,7 @@ app.post('/send-email',emailValidator ,async (req, res) => {
     console.log(req.headers)
     const { ownapikey } = req.headers;
     const {subject, html} = req.body;
-    console.log(ownapikey)
+  
     if (ownapikey !== SECRET_PASSWORD) {
         return res.status(401).json({ error: 'Acceso no autorizado' });
       }
