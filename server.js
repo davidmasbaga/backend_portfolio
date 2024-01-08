@@ -1,9 +1,13 @@
-global.Headers = require('node-fetch').Headers;
-const express = require('express');
-const cors = require('cors')
-const { Resend } = require('resend');
-require('dotenv').config()
-const fetch = require('node-fetch');
+import express from 'express';
+import cors from 'cors';
+import { Resend } from 'resend';
+import dotenv from 'dotenv';
+import { Headers } from 'node-fetch';
+
+dotenv.config();
+
+// Configura Headers globalmente si 'resend' lo requiere
+global.Headers = Headers;
 
 
 const app = express();
