@@ -1,7 +1,9 @@
+global.Headers = require('node-fetch').Headers;
 const express = require('express');
 const cors = require('cors')
 const { Resend } = require('resend');
 require('dotenv').config()
+const fetch = require('node-fetch');
 
 
 const app = express();
@@ -35,7 +37,8 @@ app.post('/send-email', emailValidator, async (req, res) => {
       from: "onboarding@resend.dev",
       to: "davidmasbaga@gmail.com",
       subject: subject,
-      html: html
+      html: html,
+      
 
     }
 
