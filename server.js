@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { Resend } from 'resend';
 import dotenv from 'dotenv';
-import fetch, { Headers } from 'node-fetch';
+
 
 dotenv.config();
 
@@ -14,7 +14,7 @@ const resend = new Resend(process.env.RESEND_APIKEY);
 app.use(cors());
 app.use(express.json());
 
-const SECRET_PASSWORD = process.env.PASSWORD;
+// const SECRET_PASSWORD = process.env.PASSWORD;
 
 const emailValidator = (req, res, next) => {
   const { email } = req.body;
@@ -30,12 +30,12 @@ const emailValidator = (req, res, next) => {
 // Ruta para enviar emails
 app.post('/send-email', emailValidator, async (req, res) => {
   try {
-    const { ownapikey } = req.headers;
+    // const { ownapikey } = req.headers;
     const { subject, html } = req.body;
 
-    if (ownapikey !== SECRET_PASSWORD) {
-      return res.status(401).json({ error: 'Acceso no autorizado' });
-    }
+    // if (ownapikey !== SECRET_PASSWORD) {
+    //   return res.status(401).json({ error: 'Acceso no autorizado' });
+    // }
 
     const payload = {
       from: "onboarding@resend.dev",
