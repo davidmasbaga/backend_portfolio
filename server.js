@@ -25,6 +25,25 @@ const emailValidator = (req, res, next) => {
   next();
 };
 
+app.get('/weather', async (req, res) => {
+  const weatherApiKey = process.env.WEATHER_API_KEY;
+  const lat = req.query.lat || '41.388';
+  const lon = req.query.lon || '2.1589';
+
+  try {
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${weatherApiKey}`;
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Ruta para enviar emails
 app.post('/send-email',emailValidator ,async (req, res) => {
